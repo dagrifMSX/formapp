@@ -1,4 +1,3 @@
-import { useState, FormEvent } from 'react';
 
 type Contact = {
     name: string;
@@ -10,16 +9,19 @@ type Contact = {
 
 
 export function ContactPage() {
-    const [contact, setContact] = useState<Contact>({
-        name: "",
-        email: "",
-        reason: "",
-        notes: "",
-    });
+
     const fieldStyle = "flex flex-col mb-2";
 
-    function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const contact = {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          reason: formData.get('reason'),
+          notes: formData.get('notes'),
+        } as Contact;
+
         console.log('Submitted details:', contact);
       }
 
@@ -32,55 +34,34 @@ export function ContactPage() {
             <form onSubmit={handleSubmit}>
                 <div className={fieldStyle}>
                     <label htmlFor="name">Your name</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={contact.name}
-                        onChange={(e) => setContact({ ...contact, name: e.target.value })}
-                    />
+                    <input type="text" id="name" name="name"/>
                 </div>
                 <div className={fieldStyle}>
                     <label htmlFor="email">Your email address</label>
-                    <input type="email" id="email" value={contact.email}
-                        onChange={(e) =>
-                            setContact({ ...contact, email: e.target.value })
-                        } />
+                    <input type="email" id="email" name="email" />
                 </div>
                 <div className={fieldStyle}>
-                    <label htmlFor="reason">Reason you need to contact       us</label>
-                    <select
-                        id="reason"
-                        onChange={(e) =>
-                            setContact({ ...contact, reason: e.target.value })
-                        }>
+                    <label htmlFor="reason">Reason you need to contact us</label>
+                    <select id="reason" name="reason" >
                         <option value=""></option>
                         <option value="Support">Support</option>
                         <option value="Feedback">Feedback</option>
                         <option value="Other">Other</option>
-                        value={contact.reason}
-
                     </select>
                 </div>
                 <div className={fieldStyle}>
                     <label htmlFor="notes">Additional notes</label>
-                    <textarea
-                        id="notes"
-                        value={contact.notes}
-                        onChange={(e) =>
-                            setContact({ ...contact, notes: e.target.value })
-                        } />
+                    <textarea id="notes" name="notes"/>
                 </div>
                 <div>
                     <button
                         type="submit"
-                        className="mt-2 h-10 px-6 font-semibold bg-black text-white">
+                        className="mt-2 h-10 px-6 font-semibold bg-green-800 text-white">
                         Submit
                     </button>
                 </div>
             </form>
             <div>
-
-                            Hallo {contact.name}
 </div>
 </div>
             );
